@@ -5,3 +5,7 @@
 #
 #   cities = City.create([{ name: 'Chicago' }, { name: 'Copenhagen' }])
 #   Mayor.create(name: 'Emanuel', city: cities.first)
+
+1.upto(50) do |i|
+  Item.create(name: "Item #{i}", position: i, description: "Item Description #{i}")
+end
