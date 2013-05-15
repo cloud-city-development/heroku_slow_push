@@ -8,11 +8,12 @@ class ItemsController < ApplicationController
 
   def show
     @item = Item.find params[:id]
+    sleep 0.1
     respond_with @item
   end
 
   def background
-    Pusher["items-channel"].trigger("items-event", Item.find( params[:id] ).to_json)
+    Pusher["items-channel"].delay( run_at: Proc.new { 0.1.seconds.from_now } ).trigger( "items-event", Item.find( params[:id] ).to_json )
     render json: {}
   end
 end
