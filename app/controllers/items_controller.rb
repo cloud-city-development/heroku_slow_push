@@ -6,8 +6,13 @@ class ItemsController < ApplicationController
     respond_with @items
   end
 
+  def show
+    @item = Item.find params[:id]
+    respond_with @item
+  end
+
   def background
-    Item.delay.background_response
+    Pusher["items-channel"].trigger("items-event", Item.find( params[:id] ).to_json)
     render json: {}
   end
 end
