@@ -1,5 +1,5 @@
 HerokuSlowPush::Application.routes.draw do
-  resources :items do
+  resources :items, :only => [:background] do
     get :background, on: :collection
   end
 
