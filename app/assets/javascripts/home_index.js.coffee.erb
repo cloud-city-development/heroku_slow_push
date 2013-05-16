@@ -1,0 +1,25 @@
+$ ->
+  $("#background-request").on "click", =>
+    eventName = bind("heroku_slow_push")
+
+    # Event name is sent to the server so the response can be sent back to
+    # the proper listener
+    $.ajax "/items/background.json", data: { event: eventName }
+
+bind = (channelName) ->
+  pusher = new Pusher("<%= ENV["PUSHER_KEY"] %>")
+  pusherChannel = pusher.subscribe(channelName)
+
+  # If the event name is static, it's possible that multiple browsers
+  # could receive the same event. This may be desired behavior in some cases,
+  # but not here; to prevent this from happening, a GUID is used for
+  # the event name
+  eventName = guid()
+  pusherChannel.bind eventName, (data) ->
+    $("#background-output").html( JSON.stringify(data) )
+
+  return eventName
+
+# guid generator lifted from http://stackoverflow.com/a/105074/573465
+s4 = -> Math.floor((1 + Math.random()) * 0x10000).toString(16).substring 1
+guid = -> s4() + s4() + "-" + s4() + "-" + s4() + "-" + s4() + "-" + s4() + s4() + s4()

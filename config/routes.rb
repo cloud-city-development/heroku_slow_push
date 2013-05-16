@@ -1,7 +1,5 @@
 HerokuSlowPush::Application.routes.draw do
-  resources :items do
-    get :background, on: :member
-  end
+  match "/items/background" => "items#background"
 
   root :to => 'home#index'
 end
